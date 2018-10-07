@@ -1,9 +1,42 @@
 module Lib where
 
-stepInToThisFunction :: IO Int
-stepInToThisFunction = do
+import Text.Parsec
+
+stepInToFunction :: IO Int
+stepInToFunction = do
     
   putStrLn "Stepped in ?"
 
   return 0
 
+
+  
+-- |
+--
+data DiskSize = DiskSize {
+    deviceDiskSize :: String
+  , sizeDiskSize :: Double
+  , unitDiskSize :: String
+  } deriving (Show, Read, Eq, Ord)
+
+-- |
+--
+getByteSize :: String -> Either String DiskSize
+getByteSize input = case parse diskSizeParser "diskSizeParser" input of
+  Left   err -> Left $ show err
+  Right  val -> Right val
+  where
+    diskSizeParser = do
+      dev  <- manyTill anyChar $ string " "
+      val  <- try pointed <|> many1 digit
+      unit <- manyTill anyChar eof
+
+      return $ DiskSize dev (read val) unit
+
+    pointed = do
+      val1  <- many1 digit 
+      char '.'
+      val2  <- many1 digit
+
+      return $! val1 ++ "." ++ val2
+  
