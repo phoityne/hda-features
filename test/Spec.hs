@@ -10,18 +10,6 @@ main = do
   stepInToFunction
 
   putStrLn "Haskell"
-
-
-
-
-
-
-
-
-
-
-
-
   
   let input = [ "/dev/sda 10.0MB"
               , "/dev/sdb 50.5GB"

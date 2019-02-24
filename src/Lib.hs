@@ -1,6 +1,7 @@
 module Lib where
 
 import Text.Parsec
+import qualified Control.Exception.Safe as E
 
 stepInToFunction :: IO Int
 stepInToFunction = do
@@ -39,4 +40,29 @@ getByteSize input = case parse diskSizeParser "diskSizeParser" input of
       val2  <- many1 digit
 
       return $! val1 ++ "." ++ val2
-  
+
+
+-- |
+-- 
+exceptionTest :: IO ()
+exceptionTest = flip E.catchAny eHdl $ do
+
+  putStrLn "exceptionTest called."
+
+  flip E.finally finalize $ run
+
+  where
+    finalize = do
+      putStrLn "finalize called."
+      return ()
+
+    eHdl :: E.SomeException -> IO ()
+    eHdl e = do
+      putStrLn $ show e
+      E.throwIO $ userError "throw exception."
+
+    run = do
+      putStrLn "run called."
+
+      fail "exception test"
+
