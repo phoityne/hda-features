@@ -49,6 +49,18 @@ exceptionTest = flip E.catchAny eHdl $ do
 
   putStrLn "exceptionTest called."
 
+  let a = DiskSize "/dev/sda" 1.2 "TB"
+  putStrLn $ show a
+
+  let b = ("year", 2020)
+  putStrLn $ show b
+
+  let c = ["hoge", "huga"]
+  putStrLn $ show c
+
+  let y = "test y"
+  putStrLn y
+
   flip E.finally finalize $ run
 
   where
