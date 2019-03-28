@@ -44,10 +44,10 @@ getByteSize input = case parse diskSizeParser "diskSizeParser" input of
 
 -- |
 -- 
-exceptionTest :: IO ()
-exceptionTest = flip E.catchAny eHdl $ do
+variableTest :: IO ()
+variableTest = do
 
-  putStrLn "exceptionTest called."
+  putStrLn "variableTest called."
 
   let a = DiskSize "/dev/sda" 1.2 "TB"
   putStrLn $ show a
@@ -61,20 +61,27 @@ exceptionTest = flip E.catchAny eHdl $ do
   let y = "test y"
   putStrLn y
 
+-- |
+-- 
+exceptionTest :: IO ()
+exceptionTest = flip E.catchAny eHdl $ do
+
+  putStrLn "exceptionTest called."
+
   flip E.finally finalize $ run
 
   where
     finalize = do
-      putStrLn "finalize called."
+      let msg = "finalize called."
+      putStrLn msg
       return ()
 
     eHdl :: E.SomeException -> IO ()
     eHdl e = do
       putStrLn $ show e
-      E.throwIO $ userError "throw exception."
+      E.throwIO $ userError "[DAP][INFO][test] 2 throwing exception."
 
     run = do
       putStrLn "run called."
 
-      fail "exception test"
-
+      fail "[DAP][INFO][test] 1 throwing exception."
